@@ -1,7 +1,7 @@
 ---
 title: "Optimize TextToVid AI Performance on Your Hardware"
 sidebarTitle: "Performance"
-description: "Tune TextToVid AI for faster video generation by configuring GPU offloading, CPU threads, memory limits, and caching settings."
+description: "Optimize TextToVid AI generation speed by configuring GPU offloading, CPU threads, memory limits, and frame buffer settings for your hardware."
 ---
 
 TextToVid AI runs entirely on your hardware — no cloud processing, no queues, no external dependencies. That means generation speed depends directly on how well you configure the app to use your CPU, GPU, and available memory. These settings help you get the best generation speed without running out of memory or starving other applications on your system.
@@ -14,7 +14,7 @@ CPU generation still works on any machine — including laptops with no discrete
 
 To enable GPU acceleration, go to **Settings → Performance → Acceleration**, select your GPU from the device list, and set `gpu_layers` to a value greater than 0 (or `-1` for automatic full offload). TextToVid AI supports **CUDA** (NVIDIA), **ROCm** (AMD), and **Metal** (Apple Silicon) backends.
 
-## GPU Offloading (`gpu_layers`)
+## GPU Offloading
 
 The `gpu_layers` setting controls how many layers of the model are offloaded to your GPU. Each layer offloaded reduces the work the CPU has to do, speeding up inference. You don't need to offload all layers to see a benefit — even partial offloading with a modest GPU provides a significant speedup over CPU-only operation.
 
@@ -29,31 +29,42 @@ Use this table as a starting point, then adjust based on observed VRAM usage dur
 
 Partial offload — where some layers run on the GPU and the remainder run on the CPU — is fully supported and still gives a substantial speedup compared to CPU-only. If you see a VRAM overflow error, reduce `gpu_layers` by 5 and try again.
 
-## Memory Management
+## Parameters
 
-These settings are available under **Settings → Performance → Memory** and help you prevent out-of-memory errors on machines with limited RAM.
+<ParamField path="gpu_layers" type="integer" default="-1">
+  Number of model layers to offload to your GPU. Set to `-1` for automatic full GPU offload. Set to `0` to disable GPU acceleration and run entirely on the CPU. Set a specific positive integer for partial offload — useful when your VRAM is limited. Monitor VRAM usage during generation and reduce this value if you see overflow errors.
 
-**Max RAM**
-Set a hard cap on how much system RAM TextToVid AI is allowed to use. This is useful on machines where other applications (browsers, creative tools, virtual machines) also need significant memory. If the app hits this limit during generation, it will reduce internal buffer sizes automatically rather than crashing.
+  **Range:** -1 (auto full offload), 0 (CPU only), or any positive integer
+</ParamField>
 
-**Model Cache**
-When enabled, TextToVid AI keeps the loaded model resident in RAM between generation jobs. This eliminates the model loading delay (which can be 30–60 seconds for large models) at the cost of keeping that memory occupied until you close the app or manually unload the model. Enable this if you're running multiple generations in a session; disable it if you need to free memory for other tasks between runs.
+<ParamField path="cpu_threads" type="integer" default="auto">
+  Number of CPU threads dedicated to inference. Defaults to the number of physical cores on your machine. For best results, set this to your physical core count minus 2 so your system stays responsive during generation. Do not exceed your physical core count — logical (hyperthreaded) cores do not improve inference throughput for this workload.
+</ParamField>
 
-**Frame Buffer Size**
-Controls how many video frames are held in memory simultaneously during the assembly phase. If you run out of RAM mid-generation — particularly on longer videos at high resolutions — reduce this value. A lower frame buffer means slightly more disk I/O during assembly but prevents crashes.
+<ParamField path="max_ram_gb" type="float" default="0">
+  Hard cap on system RAM usage in gigabytes. Set to `0` to allow TextToVid AI to use as much RAM as needed. When a non-zero limit is set, the app automatically reduces internal buffer sizes if it approaches the cap rather than crashing. Useful on machines where browsers, creative tools, or virtual machines also need significant memory.
+</ParamField>
+
+<ParamField path="model_cache" type="boolean" default="true">
+  When enabled, TextToVid AI keeps the loaded model resident in RAM between generation jobs. This eliminates the model loading delay — which can be 30–60 seconds for large models — at the cost of keeping that memory occupied until you close the app or manually unload the model. Enable this for sessions where you run multiple generations in a row; disable it to free memory between runs.
+</ParamField>
+
+<ParamField path="frame_buffer_size" type="integer" default="16">
+  Number of video frames held in memory simultaneously during the assembly phase. Reduce this value if you run out of RAM mid-generation, particularly on longer videos at high resolutions. A lower frame buffer means slightly more disk I/O during assembly but prevents out-of-memory crashes.
+
+  **Range:** 4–128 frames
+</ParamField>
 
 ## CPU Thread Tuning
 
-When running on CPU (or using partial GPU offload), the `cpu_threads` setting controls how many threads are used for inference. More threads generally means faster generation, up to the number of physical cores on your machine.
-
-Follow these guidelines for best results:
+When running on CPU (or using partial GPU offload), the `cpu_threads` setting controls how many threads are used for inference. More threads generally means faster generation, up to the number of physical cores on your machine. Follow these guidelines for best results:
 
 - **Do not exceed your physical core count.** Hyperthreaded (logical) cores do not improve inference speed and can actually slow it down for this workload.
 - **Leave 2 threads free for the OS** and background processes to stay responsive while generating.
 
 Use this formula to find the recommended value for your machine:
 
-```
+```text
 recommended_threads = total_physical_cores - 2
 ```
 

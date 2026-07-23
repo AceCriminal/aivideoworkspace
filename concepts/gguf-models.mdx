@@ -1,5 +1,5 @@
 ---
-title: "GGUF Models: What They Are and How to Choose One"
+title: "GGUF Models Explained: Quantization and Model Selection"
 sidebarTitle: "GGUF Models"
 description: "Learn what GGUF model files are, how quantization levels affect quality and speed, and which models work best for AI video generation."
 ---
@@ -8,7 +8,7 @@ GGUF is a file format for distributing and running large language models entirel
 
 ## What is GGUF?
 
-GGUF — short for **GPT-Unified Format** — is the standard file format for sharing LLM weights in a form that can be loaded and run locally. A GGUF file bundles everything the runtime needs — model weights, architecture metadata, and tokenizer configuration — into a single `.gguf` file. This makes distribution and loading straightforward: no separate configuration files, no package dependencies beyond the runtime itself.
+GGUF is the standard file format for sharing LLM weights in a form that can be loaded and run locally. A GGUF file bundles everything the runtime needs — model weights, architecture metadata, and tokenizer configuration — into a single `.gguf` file. This makes distribution and loading straightforward: no separate configuration files, no package dependencies beyond the runtime itself.
 
 GGUF was developed by the [llama.cpp](https://github.com/ggerganov/llama.cpp) project and has since become the de facto standard for local LLM inference. TextToVid AI uses the same llama.cpp-compatible runtime under the hood, which means any valid GGUF file from the broader ecosystem works with the application.
 
@@ -61,7 +61,7 @@ When in doubt, start with a popular 7B instruction-tuned model at Q4_K_M quantiz
 
 TextToVid AI looks for model files in the following default directory on all platforms:
 
-```
+```text
 ~/TextToVidAI/models/
 ```
 
