@@ -1,0 +1,87 @@
+---
+title: "Choose the Right GGUF Model for Video Generation"
+sidebarTitle: "Model Selection"
+description: "Compare GGUF model sizes and quantization levels to find the best fit for your hardware and the video quality you want to achieve."
+---
+
+The model you choose is the single biggest factor in both the quality of your generated videos and how long each generation takes. A model that's too large for your hardware will be painfully slow or fail to run altogether; a model that's too small will produce vague, incoherent results. This guide helps you find the right balance for your specific machine.
+
+## Assessing Your Hardware
+
+Before downloading any model, check what your computer is actually working with. The two numbers that matter most are your total system RAM and, if you have a dedicated GPU, its VRAM.
+
+**System RAM:**
+- **8 GB** — minimum to run TextToVid AI at all; stick to smaller, heavily quantized models
+- **16 GB** — the recommended baseline; gives you good flexibility across model sizes
+- **32 GB+** — opens up larger models and higher-quality quantization levels
+
+**GPU VRAM (for GPU-accelerated generation):**
+- GPU acceleration dramatically speeds up generation, but your VRAM sets a hard ceiling on what you can load
+- You need at least **6 GB VRAM** to run a 7B model at Q4 quantization with GPU offloading
+- If your GPU has less than 6 GB, TextToVid AI will fall back to CPU mode automatically
+
+**CPU-only mode:**
+- CPU generation works on any machine but is significantly slower than GPU-accelerated generation
+- If you're running CPU-only, use **Q2_K** or **Q4_K_M** quantization to keep generation times manageable
+
+<Tip>
+  You can check your hardware specs directly inside TextToVid AI without opening a separate system tool. Go to **Settings → About → Hardware** to see your total RAM, detected GPU, and available VRAM all in one place.
+</Tip>
+
+## Picking a Quantization Level
+
+GGUF models come in multiple quantization levels. Higher quantization numbers mean less compression and better quality, but they require more RAM and run more slowly. Lower quantization numbers are faster and lighter but sacrifice some output fidelity.
+
+Use this table as a starting point:
+
+| Your RAM | Recommended Quantization | Expected Speed |
+|---|---|---|
+| 8 GB | Q2_K or Q4_K_M | Fast |
+| 16 GB | Q4_K_M or Q5_K_M | Moderate |
+| 32 GB+ | Q6_K or Q8_0 | Slower but higher quality |
+
+If you're unsure, **Q4_K_M** is the most commonly recommended quantization level across the community — it offers a good quality-to-performance ratio on a wide range of hardware and is the best default choice if you have 16 GB of RAM.
+
+## Model Size (Parameters)
+
+Beyond quantization, you'll also choose between model sizes — most commonly **7B** (7 billion parameters) and **13B** (13 billion parameters).
+
+**7B models** are fast, widely compatible, and good enough for the vast majority of video generation use cases. If you're new to TextToVid AI or working on a machine with 16 GB of RAM or less, start here. Generation times are reasonable even on mid-range hardware, and the output quality is solid.
+
+**13B models** produce more coherent scene descriptions and handle complex, multi-element prompts better than 7B models. The tradeoff is that they need significantly more RAM — plan on at least 24 GB for a Q4-quantized 13B model — and generation times are noticeably longer. If you have a high-RAM machine and want the best possible output quality, a 13B model is worth exploring.
+
+In practical terms: start with a 7B model, learn what makes a good prompt, and only move to a 13B model once you've hit the ceiling of what your current setup can produce.
+
+## Loading a Model in TextToVid AI
+
+<Steps>
+  <Step title="Download a GGUF file">
+    Visit [HuggingFace](https://huggingface.co) and search for the model you want. Look for repositories that include `.gguf` files in the file listing. Choose the quantization variant that matches your hardware (see the table above), then download the `.gguf` file to your computer.
+  </Step>
+
+  <Step title="Place the file somewhere stable">
+    Move the downloaded `.gguf` file to a folder where it will stay permanently — for example, a dedicated `Models` folder in your home directory. TextToVid AI stores the path to this file, so moving it later will break the reference.
+  </Step>
+
+  <Step title="Open the Models settings">
+    In TextToVid AI, go to **Settings → Models → Add Model**. The model browser dialog opens.
+  </Step>
+
+  <Step title="Browse to your file">
+    Click **Browse**, navigate to the folder where you saved the `.gguf` file, select it, and click **Open**. TextToVid AI validates the file and registers it.
+  </Step>
+
+  <Step title="Confirm the model is available">
+    Close Settings. Your newly added model now appears in the **Model** dropdown on the main screen. Select it to make it the active model for your next generation.
+  </Step>
+</Steps>
+
+## Switching Between Models
+
+TextToVid AI supports loading multiple models at the same time, so you can switch between them without restarting the application. Open the **Model** dropdown on the main screen at any time and select a different model from the list. The new model loads into memory and is ready for your next generation.
+
+This is useful when you're experimenting — you might use a fast Q2 model for quick drafts and a higher-quality Q5 or Q6 model for final renders, switching between them as needed in the same session.
+
+<Warning>
+  Keep your `.gguf` model files in a stable, permanent location on your computer. If you move, rename, or delete a `.gguf` file after loading it into TextToVid AI, the application will show a **"Model not found"** error when you try to select that model. To fix this, go to **Settings → Models**, remove the broken entry, and re-add the model from its new location.
+</Warning>

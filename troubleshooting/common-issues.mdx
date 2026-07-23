@@ -1,0 +1,70 @@
+---
+title: "Fix Common TextToVid AI Problems and Errors"
+sidebarTitle: "Common Issues"
+description: "Solutions for the most common TextToVid AI problems: slow generation, out-of-memory errors, blank frames, corrupted exports, and app crashes."
+---
+
+Most issues with TextToVid AI fall into a few predictable categories — hardware resource limits, misconfigured settings, and export path problems. This page covers the most common problems and how to fix them, ordered by how frequently they come up.
+
+<Note>
+  TextToVid AI includes a built-in diagnostic tool at **Help → Run Diagnostics**. It automatically checks your GPU drivers, available memory, and the integrity of your loaded model files, and reports any issues it finds with suggested fixes. Run this first if you're not sure where to start.
+</Note>
+
+## Issues
+
+<Accordion title="Generation is extremely slow">
+  If generation is taking far longer than the [benchmark estimates](/configuration/performance#performance-benchmarks) suggest, work through these checks in order:
+
+  1. **Check `gpu_layers`.** If it's set to `0`, you're running on CPU only. Go to **Settings → Performance → Acceleration**, select your GPU, and increase `gpu_layers` to a value appropriate for your VRAM. Even partial offloading provides a major speedup.
+  2. **Reduce resolution and inference steps for iteration.** Use the **Draft** preset (256×256, 15 steps) while refining your prompt. Switch to higher quality only for final renders.
+  3. **Check for GPU competition.** Other GPU-intensive applications (games, video editors, machine learning tools) running at the same time will compete for VRAM and CUDA cores. Close them before generating.
+  4. **Verify your GPU drivers.** Outdated or misconfigured CUDA (NVIDIA), ROCm (AMD), or Metal (Apple) drivers can prevent GPU acceleration from working even when it appears to be enabled. Check **Help → Run Diagnostics** for driver status.
+</Accordion>
+
+<Accordion title="Out of memory error (OOM)">
+  An out-of-memory error means the model and generation buffers together exceed your available RAM or VRAM. Try each of the following steps until the error stops:
+
+  1. **Switch to a lower quantization level.** For example, use `Q4_K_M` instead of `Q8_0`. A lower quantization uses significantly less memory with only a modest quality trade-off.
+  2. **Reduce `gpu_layers`.** Fewer layers on the GPU means less VRAM consumed. Try reducing by 5–10 layers at a time.
+  3. **Close other applications.** Browsers, IDEs, and other large applications can consume several gigabytes of RAM. Free up as much as possible before generating.
+  4. **Reduce `context_length`.** In **Settings → Models → Configure**, lower the context length. This is one of the largest contributors to RAM usage.
+  5. **Reduce frame buffer size.** In **Settings → Performance → Memory**, lower the frame buffer size to reduce peak memory usage during video assembly.
+</Accordion>
+
+<Accordion title="Video has blank or all-black frames">
+  Blank or black frames mean the model failed to produce usable content for those specific frames. This is usually caused by insufficient inference steps or a prompt that doesn't give the model enough to work with.
+
+  - **Increase inference steps.** A minimum of 20 steps is recommended; values below that often produce empty or incoherent frames.
+  - **Make your prompt more descriptive.** Short or abstract prompts leave too much ambiguity. Add specific visual details: setting, lighting, subject, motion, and style.
+  - **Try a different random seed.** Some seeds produce poor results for a given prompt. Set `seed` to `-1` and run a few generations to find a seed that works, then lock it in.
+  - **Confirm the model is fully loaded.** Check the model status indicator in the bottom status bar. If it shows "Loading" or an error icon, wait for it to complete or reload the model via **Settings → Models**.
+</Accordion>
+
+<Accordion title="Generated video is very blurry or distorted">
+  Blurry or distorted output generally means the model didn't have enough steps to refine the frames, or the prompt wasn't guiding it toward sharp, detailed output.
+
+  - **Increase inference steps.** Try 50–80 steps. There's a noticeable quality improvement between 20 and 60 steps for most models.
+  - **Add quality-directing keywords to your prompt.** Phrases like `"sharp focus, high detail, 4K, cinematic"` actively steer the model toward higher quality output.
+  - **Add a negative prompt.** In the negative prompt field, enter terms like `"blurry, distorted, low quality, artifacts, noisy"` to steer the model away from those characteristics.
+  - **Use a higher quantization model.** Lower quantizations (Q2, Q3) can produce degraded output. Use `Q5_K_M` or higher for best visual results.
+</Accordion>
+
+<Accordion title="App crashes during generation">
+  A crash during generation is almost always caused by running out of RAM or VRAM mid-process. Start with the steps in the **Out of memory error** section above.
+
+  If memory isn't the cause, gather crash logs to identify the root issue:
+
+  - **Windows:** Open **Event Viewer → Windows Logs → Application** and look for errors timestamped at the time of the crash.
+  - **macOS:** Open **Console.app**, filter by "TextToVid", and look for crash reports.
+
+  Once you have logs, submit them via **Help → Send Crash Report**. The report includes your system specs and the crash trace, which helps the support team identify the issue quickly.
+</Accordion>
+
+<Accordion title="Export failed — cannot write file">
+  A failed export is almost always a file system issue rather than a generation problem. The video was generated successfully — it just couldn't be saved.
+
+  1. **Check that the output directory exists.** TextToVid AI creates the default `~/Videos/TextToVidAI/` directory automatically, but custom paths must exist before exporting. Create the folder manually if needed.
+  2. **Check write permissions.** Ensure your user account has write access to the output directory. On macOS, you may need to grant TextToVid AI permission in **System Settings → Privacy & Security → Files and Folders**.
+  3. **Check available disk space.** Large exports consume significant space — a 10-second video at 1280×720 exported as a PNG sequence can exceed 500 MB. Ensure you have sufficient space on the target drive.
+  4. **Try a different output path.** If the default path fails, try exporting to your Desktop as a quick test to rule out a path-specific issue.
+</Accordion>

@@ -1,0 +1,109 @@
+---
+title: "Video Pipeline: Resolution, Frame Rate, and Codec Settings"
+sidebarTitle: "Video Pipeline"
+description: "Understand TextToVid AI's video pipeline: how resolution, frame rate, codec choice, and inference steps combine to control quality and generation time."
+---
+
+The video pipeline is the collection of settings that determine what your finished video looks like and how long it takes to produce. Resolution, frame rate, duration, codec, and inference steps all interact with each other — changing one often affects your expectations for the others. Understanding how they connect gives you direct control over the quality-versus-speed trade-off for every project you create.
+
+## Resolution
+
+Resolution sets the pixel dimensions of every frame in your video. TextToVid AI supports the following options:
+
+| Resolution | Aspect Ratio | Use Case |
+|---|---|---|
+| 256×256 | 1:1 | Rapid prototyping, concept tests |
+| 512×512 | 1:1 | General use, recommended starting point |
+| 768×768 | 1:1 | Higher-detail square output |
+| 1024×576 | 16:9 | Widescreen at moderate cost |
+| 1280×720 | 16:9 | HD widescreen final renders |
+
+Generation time scales **exponentially** with resolution, not linearly. Moving from 256×256 to 512×512 quadruples the number of pixels per frame, and the synthesis workload grows accordingly. A render that takes two minutes at 256×256 can easily take fifteen minutes or more at 512×512 on the same hardware.
+
+<Note>
+  **512×512 is the recommended starting resolution for most projects.** It strikes a practical balance between visual detail and generation time. Use 256×256 exclusively for quick drafts and iteration, and reserve 720p for final renders where quality is the priority.
+</Note>
+
+## Frame Rate
+
+Frame rate (FPS) controls how many individual frames are displayed each second in the finished video. TextToVid AI supports four options:
+
+- **8 FPS** — Very low; suitable only for abstract or slow-moving content. Noticeably choppy on natural motion.
+- **12 FPS** — The classic "film-like" rate; works well for stylized or artistic content and keeps frame counts manageable.
+- **24 FPS** — Standard cinematic frame rate; smooth motion with a natural feel. The best choice for most narrative or scenic videos.
+- **30 FPS** — Smooth and modern; common for social media and screen recordings. Generates 25% more frames than 24 FPS for the same duration.
+
+Higher FPS produces smoother motion, but every additional frame per second is a frame that must be synthesized from scratch. For short social media clips or looping animations, 12–24 FPS is a practical and widely accepted range.
+
+## Duration
+
+Duration sets the total length of the video in seconds, from a minimum of **1 second** up to a maximum of **60 seconds**.
+
+The total number of frames the pipeline must generate is:
+
+```
+Total frames = Duration (seconds) × Frame rate (FPS)
+```
+
+For example, a **5-second video at 24 FPS** requires **120 frames** to be individually synthesized. A **30-second video at 24 FPS** requires 720 frames. Keep this relationship in mind when estimating generation time — duration and FPS multiply together, so a modest increase in both can produce a very large increase in total work.
+
+For your first projects, keep duration short (3–5 seconds) while you calibrate your prompt and settings. Once you are satisfied with the output, scale up to your target length.
+
+## Codec and Container
+
+The codec and container format determine how your rendered frames are packaged into a video file. Each option involves trade-offs between compatibility, file size, and downstream usability.
+
+<Tabs>
+  <Tab title="MP4 (H.264)">
+    **Best for: general sharing and playback**
+
+    MP4 with H.264 encoding is the most universally compatible video format available. It plays natively on every major operating system, browser, mobile device, and video hosting platform. File sizes are small thanks to efficient compression, and quality remains excellent at standard bitrates.
+
+    Choose MP4 whenever you plan to share, upload, or embed your video. It is the default output format in TextToVid AI for a reason.
+  </Tab>
+  <Tab title="WebM (VP9)">
+    **Best for: web embedding and open formats**
+
+    WebM with VP9 encoding is an open, royalty-free format optimized for web delivery. It offers slightly better compression than H.264 at equivalent quality, and is natively supported by all modern browsers. It is a good choice if you are embedding videos directly in web pages or prefer avoiding patented codecs.
+
+    Note that some non-browser media players and older devices may not support WebM natively.
+  </Tab>
+  <Tab title="GIF">
+    **Best for: short loops and universal compatibility**
+
+    GIF produces an animated image rather than a true video file. It requires no video player, embeds anywhere that displays images, and loops automatically. The significant limitations are a 256-color palette (which produces visible dithering on photographic content) and no audio support.
+
+    GIF is best suited to short loops of **3 seconds or less** with simple, high-contrast visuals — for example, animated logos, icons, or abstract motion graphics. Longer or more complex content will result in large file sizes and poor image quality.
+  </Tab>
+  <Tab title="PNG Sequence">
+    **Best for: post-processing in video editors**
+
+    Exporting as a PNG sequence writes each frame as an individual, losslessly compressed image file rather than encoding them into a single video container. This preserves the maximum possible image quality and gives you full flexibility to import the frames into a professional video editor (such as DaVinci Resolve, Premiere Pro, or Final Cut Pro) for color grading, compositing, or custom encoding.
+
+    PNG sequences produce many files and large total sizes. Use this format when TextToVid AI is one step in a larger production workflow rather than your final output destination.
+  </Tab>
+</Tabs>
+
+## Inference Steps
+
+Inference steps determine how many refinement passes the generation process performs on each individual frame. A higher step count produces a more polished, detailed result; a lower step count finishes faster but may leave frames looking soft or inconsistent.
+
+| Preset | Steps | Generation Speed | Best For |
+|---|---|---|---|
+| Draft | 20 | Fastest | Prompt testing, composition checks |
+| Standard | 40 | Moderate | Everyday use, review cuts |
+| High Quality | 80 | Slowest | Final renders, publication-ready output |
+
+You can also enter a custom step count manually. Values below 20 rarely produce usable frames. Values above 100 yield diminishing returns and are not typically worth the additional generation time.
+
+Because inference steps apply **per frame**, their impact on total generation time compounds with frame count. A 120-frame video at 80 steps takes four times as long as the same video at 20 steps.
+
+<Tip>
+  **Use this workflow to move efficiently from idea to final output:**
+
+  1. **Prototype** at 256×256 resolution, 12 FPS, 3 seconds, 20 inference steps. This gives you a fast preview to validate your prompt and composition.
+  2. **Refine** your prompt and settings based on the draft. Adjust keyframe pacing, model, or style descriptors as needed.
+  3. **Final render** at 512×512 or higher, your target FPS, full duration, and 60–80 inference steps.
+
+  This two-pass approach saves significant time compared to running full-quality settings during iteration.
+</Tip>

@@ -1,0 +1,105 @@
+---
+title: "Generate Multiple Videos at Once with Batch Mode"
+sidebarTitle: "Batch Generation"
+description: "Use TextToVid AI's batch generation mode to queue multiple text prompts and generate them unattended, saving time on large projects."
+---
+
+Batch generation lets you queue up as many prompts as you need and walk away — TextToVid AI works through them one by one in the background, saving each completed video to your chosen output folder. Instead of manually starting a new generation every time one finishes, you do the setup once and let the application handle the rest. This is especially useful for large projects, overnight runs, or any situation where you want to test many different prompts without sitting at your computer.
+
+## Opening Batch Mode
+
+To start a new batch, go to **File → New Batch**, or click the **Batch** tab at the top of the main interface. The batch editor opens in a new panel, showing an empty queue ready for you to add prompts.
+
+## Setting Up a Batch Job
+
+<Steps>
+  <Step title="Create a batch">
+    Go to **File → New Batch**. The batch editor opens with an empty prompt queue. You can also access it by clicking the **Batch** tab in the main interface if you've already opened the app.
+  </Step>
+
+  <Step title="Add prompts">
+    Click **Add Prompt** to open the prompt entry dialog. Type your text prompt in the **Prompt** field and, optionally, enter exclusion terms in the **Negative Prompt** field. Click **Save** to add it to the queue. Repeat this process for every video you want to generate.
+  </Step>
+
+  <Step title="Set per-prompt settings">
+    Each prompt in the queue can have its own resolution, duration, FPS, and inference steps — useful when different scenes in your project need different specifications. Click any prompt in the queue and adjust its settings in the panel on the right.
+
+    If you want every prompt to use the same settings, click **Apply Global Settings** at the top of the batch editor and configure the shared values there. Global settings will override any per-prompt configuration for all items in the queue.
+  </Step>
+
+  <Step title="Import prompts from a file">
+    If you have a large list of prompts, entering them manually is slow. Instead, click **Import** and select either a `.txt` or `.csv` file from your computer. TextToVid AI reads the file and adds all prompts to the queue automatically.
+
+    See the [Batch File Format](#batch-file-format) section below for the exact format each file type expects.
+  </Step>
+
+  <Step title="Set the output directory">
+    Click **Output Folder** in the batch settings panel and browse to the folder where you want all generated videos saved. TextToVid AI names each output file based on the first few words of its corresponding prompt, so files are easy to identify after the batch completes.
+  </Step>
+
+  <Step title="Start the batch">
+    Click **Start Batch**. The batch editor switches to the queue view, which shows a live status for every item in the list. TextToVid AI begins generating the first prompt immediately and works through the queue in order.
+  </Step>
+
+  <Step title="Monitor progress">
+    The queue view displays a status badge next to each item:
+
+    | Status | Meaning |
+    |---|---|
+    | **Waiting** | Queued and not yet started |
+    | **Generating** | Currently being processed |
+    | **Completed** | Finished successfully — video saved to output folder |
+    | **Failed** | An error occurred during generation |
+
+    You can leave the application running in the background and return when the batch is done. TextToVid AI continues generating even when the window is minimized.
+  </Step>
+</Steps>
+
+## Batch File Format
+
+You can import prompts from a plain text file or a CSV file. Use whichever format fits your workflow.
+
+**Plain text file (`.txt`)** — one prompt per line, no headers required:
+
+```text
+A sunset over the ocean with waves crashing on shore, golden hour, cinematic
+A forest path covered in autumn leaves, slow tracking shot, soft diffused light
+A futuristic city at night with neon lights reflecting on wet streets, cyberpunk
+```
+
+When importing a `.txt` file, all prompts are added with the global batch settings applied. Per-prompt settings (resolution, duration, FPS, steps) are not supported in plain text format.
+
+**CSV file (`.csv`)** — includes a header row and supports per-prompt settings:
+
+```csv
+prompt,negative_prompt,resolution,duration,fps,steps
+A sunset over the ocean with waves crashing on shore,blurry low quality,512x512,5,12,40
+A forest path covered in autumn leaves,distorted artifacts,768x768,8,24,50
+A futuristic city at night with neon lights,watermark text overlay,512x512,6,12,40
+```
+
+The `prompt` column is required. All other columns are optional — if you omit them, TextToVid AI falls back to the global batch settings for those values. Include only the columns you need.
+
+## Handling Failed Items
+
+If any prompt in the queue fails during generation, TextToVid AI marks it with a red **Failed** badge and moves on to the next item rather than stopping the entire batch. Once the batch finishes, you can address failed items in a few ways:
+
+- **Retry a single item** — click the failed item in the queue to select it, then click **Retry**. TextToVid AI re-queues just that item and generates it immediately.
+- **Retry all failed items** — click **Retry All Failed** at the top of the queue view. TextToVid AI re-queues every failed item in sequence and runs them as a mini-batch.
+- **Edit and retry** — click a failed item, edit the prompt or adjust its settings, then click **Retry**. This is useful if the failure was caused by a prompt that was too long or contained unsupported characters.
+
+Common causes of failure include insufficient memory for the selected resolution, corrupted model files, and prompts that exceed the model's maximum token length.
+
+## Batch Notifications
+
+You don't need to watch the queue view for the entire batch to run. TextToVid AI can send you a system notification when the full batch completes, so you can do other things and come back when it's done.
+
+To enable batch completion notifications, go to **Settings → Notifications → Batch Complete** and toggle it on. You'll receive a system notification with a summary of how many items completed successfully and how many failed.
+
+<Tip>
+  Batch generation is a great use of overnight hours. Set up your batch before you go to sleep, configure a large output folder with plenty of free space, and let TextToVid AI run while your computer is otherwise idle. You'll wake up to a full set of generated videos ready to review. If you have a large batch, prioritize your most promising prompts at the top of the queue so the best results are ready first.
+</Tip>
+
+<Warning>
+  Make sure your computer won't go to sleep while a batch is running. If the system sleeps mid-generation, TextToVid AI will pause and the in-progress video may be lost. Disable sleep mode in your operating system's power settings before starting a long batch — on Windows, go to **Settings → System → Power & Sleep**; on macOS, go to **System Settings → Battery → Options** and enable "Prevent automatic sleeping when the display is off."
+</Warning>

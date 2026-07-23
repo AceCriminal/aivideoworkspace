@@ -1,0 +1,65 @@
+---
+title: "How TextToVid AI Generates Videos from Text"
+sidebarTitle: "How It Works"
+description: "Understand how TextToVid AI transforms text prompts into video sequences using a local GGUF language model and a frame synthesis pipeline."
+---
+
+TextToVid AI turns a plain text description into a fully rendered video clip — entirely on your machine. You type a prompt, configure your output settings, and the application runs a multi-stage pipeline that interprets your words, plans every frame, synthesizes each image, and assembles the final file. No internet connection is required at any point in the process.
+
+## The Generation Pipeline
+
+Each video you create passes through four sequential stages. Understanding these stages helps you tune your settings and set realistic expectations for generation time.
+
+<Steps>
+  <Step title="Prompt Interpretation">
+    The GGUF language model reads your text prompt and converts it into a structured scene description. It identifies subjects, environments, lighting, motion, and mood, then breaks the scene into a series of **keyframes** — anchor points that define how the video should look at specific moments in time.
+  </Step>
+  <Step title="Frame Planning">
+    Using your chosen duration and frame rate, the system calculates the total number of frames the video requires. It maps your keyframes across that timeline and determines how much visual change should occur between each one, laying the groundwork for smooth interpolation.
+  </Step>
+  <Step title="Frame Synthesis">
+    Each frame is rendered individually based on its position between keyframes. The synthesis engine interpolates motion, color, and composition across the sequence, applying the number of inference steps you configured to progressively refine every frame.
+  </Step>
+  <Step title="Video Assembly">
+    The completed frames are combined in sequence and encoded using your chosen codec and container format. The result is a single video file written to your specified output directory, ready to preview or share.
+  </Step>
+</Steps>
+
+## Role of the GGUF Model
+
+The GGUF model is the creative brain of the entire pipeline. It takes your raw text and translates it into precise visual instructions that every downstream stage depends on. Without a strong interpretation at this first step, the rest of the pipeline has little to work with.
+
+Different models bring different strengths to the task. Some excel at cinematic, wide-shot compositions; others produce vivid abstract or stylized imagery; still others stay close to photorealistic rendering. Choosing the right model for your creative goal is one of the highest-impact decisions you can make. See [GGUF Models](/concepts/gguf-models) for guidance on selecting and downloading models.
+
+Every model runs entirely on your local hardware — your CPU, GPU, or both, depending on your configuration. No portion of your prompt or any generated content ever leaves your device.
+
+<Info>
+  All processing in TextToVid AI happens locally on your machine. Your prompts, your models, and your generated videos are never transmitted to any server or third-party service.
+</Info>
+
+## What Affects Output Quality?
+
+Many factors influence how polished your final video looks. The table below summarizes the most important ones and explains how each shapes the result.
+
+| Factor | How It Affects Output |
+|---|---|
+| **Prompt detail** | More specific, descriptive prompts give the model clearer instructions, producing more coherent scenes. Vague prompts lead to unpredictable results. |
+| **Model quality / size** | Larger, higher-quality models interpret prompts more accurately and produce more realistic or nuanced visuals. Smaller models are faster but less capable. |
+| **Resolution** | Higher resolution captures more detail but increases generation time exponentially. Start low for drafts, then scale up for final renders. |
+| **Frame rate** | A higher FPS produces smoother motion, but requires more frames to be synthesized, increasing total generation time proportionally. |
+| **Inference steps** | More steps refine each frame further, improving detail and reducing artifacts. Fewer steps are faster but may produce blurry or inconsistent frames. |
+
+## Inference Steps Explained
+
+Inference steps control how many passes the generation process makes over each frame before it is considered complete. On each pass, the output becomes progressively more refined — edges sharpen, textures gain detail, and noise is reduced. The trade-off is time: doubling the step count roughly doubles the time spent per frame.
+
+Use these ranges as a starting point:
+
+- **20–50 steps** — ideal for draft previews and quick iteration. Expect softer details and occasional artifacts, but generation is fast.
+- **50–100 steps** — recommended for final renders. Output is noticeably sharper, more consistent across frames, and suitable for sharing or publishing.
+
+There is rarely a meaningful quality improvement beyond 100 steps, so treat that as a practical upper bound for most projects.
+
+<Tip>
+  Write prompts the way you would direct a cinematographer. Include the setting, lighting conditions, camera angle, subject action, and mood. For example: *"A lone lighthouse on a rocky cliff at dusk, slow camera pull-back, golden hour lighting, cinematic"* will consistently outperform *"a lighthouse."*
+</Tip>

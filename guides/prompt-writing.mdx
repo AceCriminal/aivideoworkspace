@@ -1,0 +1,108 @@
+---
+title: "Write Effective Prompts for AI Video Generation"
+sidebarTitle: "Prompt Writing"
+description: "Learn how to write text prompts that produce high-quality AI videos: structure, keywords, negative prompts, and scene composition tips."
+---
+
+Your prompt is the most powerful tool you have in TextToVid AI. The model can only work with what you give it — a vague or poorly structured prompt produces vague, incoherent video, while a detailed, well-composed prompt gives the model everything it needs to render a compelling scene. Learning to write good prompts is a skill that compounds over time, and this guide gives you a practical framework to build on.
+
+## Prompt Structure
+
+The most reliable way to write a strong prompt is to follow a consistent structure that covers the key elements of a scene:
+
+```
+[Subject] + [Action] + [Environment] + [Style/Mood] + [Technical Quality]
+```
+
+Each element adds a layer of specificity that helps the model narrow in on what you're actually imagining. Here's what the difference looks like in practice:
+
+| | Prompt |
+|---|---|
+| **Bad** | `a cat` |
+| **Better** | `A fluffy orange tabby cat walking slowly through a sun-drenched garden, shallow depth of field with bokeh background, cinematic lighting, high quality` |
+
+The "bad" prompt isn't wrong — it just leaves almost every decision up to the model. The "better" prompt specifies the subject's appearance, its action, its environment, the visual style, and an explicit quality cue. Each addition moves the output closer to a specific vision and further from a random guess.
+
+You don't have to hit every element in every prompt, but covering at least three or four of them consistently will make a noticeable difference in your results.
+
+## Describing Motion
+
+Video generation is fundamentally about movement, so how you describe motion in your prompt has a large impact on the result. Use specific, active language rather than static descriptions.
+
+**Motion verbs that work well:**
+- `slowly panning across`, `gently swaying`, `zooming out from`, `drifting through`, `rotating around`, `flowing downward`, `flickering softly`
+
+**Camera movement terms the model responds to:**
+- `tracking shot` — camera follows the subject
+- `aerial view` or `drone shot` — high-angle, overhead perspective
+- `close-up` or `macro` — tight framing on a small subject
+- `dolly zoom` — the subject stays the same size while the background zooms
+- `slow motion` — makes fast action feel deliberate and cinematic
+- `timelapse` — compresses long durations into short clips (clouds moving, flowers blooming)
+
+Combine a camera term with a motion verb for the most precise control: `a slow tracking shot of a cyclist weaving through a foggy forest path` gives the model both the camera behavior and the subject's movement in one clear instruction.
+
+## Style Keywords
+
+Certain keywords consistently steer the model toward specific visual styles. Organize your style keywords by category and pick one or two from each to avoid overwhelming the prompt.
+
+**Quality**
+`cinematic`, `photorealistic`, `high detail`, `sharp focus`, `4K`, `high resolution`, `professional`
+
+**Lighting**
+`golden hour`, `soft diffused light`, `dramatic shadows`, `studio lighting`, `backlit`, `volumetric light`, `candlelight`, `neon glow`
+
+**Camera**
+`wide angle`, `macro`, `drone shot`, `slow motion`, `time-lapse`, `fish-eye`, `telephoto`, `tilt-shift`
+
+**Mood**
+`peaceful`, `dramatic`, `mysterious`, `vibrant`, `minimalist`, `ethereal`, `melancholic`, `energetic`
+
+You don't need to use all four categories in every prompt. A strong subject description paired with one quality keyword and one lighting keyword is often enough to produce a focused result.
+
+## Negative Prompts
+
+A negative prompt is a list of words or phrases that tell the model what to exclude from the output. While your main prompt describes what you want to see, the negative prompt describes what you want to avoid. Used together, they give you significantly more control over the final result.
+
+To enter a negative prompt, click the **Negative Prompt** field directly below the main prompt text area in the TextToVid AI interface and type your exclusion terms. Separate each term with a comma.
+
+A reliable general-purpose negative prompt to start with:
+
+```
+blurry, low quality, watermark, text, distorted, artifacts, overexposed, noisy
+```
+
+Tailor your negative prompt to the specific problems you're seeing. If your output has too much camera shake, add `shaky camera`. If faces look distorted, add `deformed faces, uncanny`. The negative prompt is most useful as a reactive tool — run a generation, identify what you don't like, then add the relevant terms to your negative prompt before the next run.
+
+## Prompt Examples
+
+Here are five complete prompts across different themes, each paired with a negative prompt. Use these as templates or inspiration for your own work.
+
+```
+Prompt: A timelapse of clouds rolling over mountain peaks at sunset, warm orange and pink tones, aerial drone view, cinematic, photorealistic
+Negative: blurry, low quality, distorted, artifacts, flat lighting
+```
+
+```
+Prompt: A close-up of rain droplets hitting the surface of a still lake, slow motion, soft gray light, ripples expanding outward, peaceful
+Negative: blurry, overexposed, shaky camera, low quality, noisy
+```
+
+```
+Prompt: A futuristic city street at night, neon signs reflecting on wet pavement, pedestrians with umbrellas, tracking shot, cyberpunk aesthetic, cinematic lighting, high detail
+Negative: low quality, distorted, watermark, text overlay, artifacts, flat colors
+```
+
+```
+Prompt: A single candle flame in a dark room, macro close-up, gentle flickering motion, warm amber glow, volumetric light, minimal, photorealistic
+Negative: blurry, overexposed, noisy, shaky, low detail
+```
+
+```
+Prompt: An autumn forest path covered in red and orange leaves, slow dolly forward, golden hour light filtering through trees, shallow depth of field, cinematic, high quality
+Negative: blurry, distorted, low quality, artifacts, oversaturated, shaky camera
+```
+
+<Tip>
+  Keep a plain text file specifically for prompts that produced results you liked. Paste in the full prompt and negative prompt, add a short note about what worked, and name each entry clearly. Over time this personal library becomes one of your most valuable tools — you can remix successful prompts, spot patterns in what works for your hardware and models, and avoid re-discovering the same dead ends.
+</Tip>

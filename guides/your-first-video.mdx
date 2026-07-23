@@ -1,0 +1,95 @@
+---
+title: "Create Your First AI Video with TextToVid AI"
+sidebarTitle: "First Video"
+description: "A hands-on walkthrough for creating your first AI-generated video in TextToVid AI, from writing a prompt to exporting the final MP4 file."
+---
+
+By the end of this guide, you'll have a real AI-generated video file saved to your computer. You'll walk through every step of the process — from launching the app and writing your first prompt, to previewing the result and exporting a finished MP4. Even if this is your first time using TextToVid AI, you'll be generating videos within minutes.
+
+<Note>
+  Before you begin, make sure you have TextToVid AI installed on your computer and at least one GGUF model loaded. If you haven't loaded a model yet, head over to the [Model Selection guide](/guides/model-selection) first, then come back here.
+</Note>
+
+## Walk Through Your First Generation
+
+<Steps>
+  <Step title="Open TextToVid AI">
+    Launch TextToVid AI from your desktop shortcut or your system's applications folder. The main interface opens with the prompt area in the center, the model selector at the top, and the generation controls along the right panel.
+  </Step>
+
+  <Step title="Select Your Model">
+    At the top of the interface, click the **Model** dropdown. You'll see a list of all GGUF models you've loaded. Select the model you want to use for this generation. If you only have one model loaded, it will already be selected.
+  </Step>
+
+  <Step title="Write Your Prompt">
+    Click inside the **Prompt** text area and type a description of the scene you want to generate. Be as descriptive as you can — the more detail you give the model, the more focused your output will be.
+
+    Here's a good prompt to start with:
+
+    ```
+    A slow-motion close-up of a coffee cup being filled, steam rising, warm morning light
+    ```
+
+    This prompt works well for a first attempt because it describes a single clear subject, a specific motion, and a distinct lighting condition — all factors that help the model produce a coherent result.
+  </Step>
+
+  <Step title="Set Generation Parameters">
+    In the right panel, configure the following settings for your first generation:
+
+    | Setting | Value |
+    |---|---|
+    | Resolution | 512×512 |
+    | Duration | 5 seconds |
+    | FPS | 12 |
+    | Inference Steps | 30 |
+
+    These settings strike a good balance between generation speed and output quality — ideal for a first attempt where you just want to see a result quickly.
+  </Step>
+
+  <Step title="Click Generate">
+    Click the **Generate** button. A progress bar appears below the prompt area and updates frame by frame as TextToVid AI works through the generation. You'll see a frame counter showing how many frames have been completed out of the total.
+
+    Your first generation will take longer than subsequent ones because the model needs to load fully into memory on the first run. Once it's warmed up, future generations with the same model will start faster.
+  </Step>
+
+  <Step title="Preview the Result">
+    When generation completes, the built-in video player opens automatically in the preview panel. Click **Play** to watch your video. Use the scrubber to step through individual frames if you want to examine specific moments in detail.
+  </Step>
+
+  <Step title="Export the Video">
+    When you're ready to save your video, follow these steps:
+
+    1. Go to **File → Export**
+    2. Choose your format — **MP4** is recommended for general use and the widest compatibility
+    3. Select a save location on your computer
+    4. Click **Export**
+
+    TextToVid AI saves the file and shows a confirmation message with a link to open the folder where the file was saved.
+  </Step>
+</Steps>
+
+## Understanding the Result
+
+Your first video might not look exactly how you imagined it — that's completely normal. AI video generation is an iterative process, and the first output is a starting point, not a final product. You may notice some softness in the motion, slight inconsistencies between frames, or a result that only loosely matches your prompt.
+
+A few things to keep in mind as you evaluate your first video:
+
+- **Lower inference steps mean lower quality.** The 30-step setting you used above is intentionally fast. Pushing steps to 50 or higher will produce noticeably sharper, more coherent results.
+- **Short prompts produce vague results.** The model needs specificity to produce focused output. A prompt like "a cat" gives the model very little to work with.
+- **The model matters.** Smaller or more heavily quantized models trade quality for speed. As you get comfortable, experiment with different model sizes to see what your hardware can handle.
+
+Don't judge the process by your first attempt — most great videos come from several rounds of prompt refinement.
+
+## Improving Your Video
+
+Once you've seen your first result, try these adjustments to get a better output on your next generation:
+
+- **Add more descriptive language.** Replace vague nouns with specific ones. Instead of "a city", try "a rain-slicked Tokyo street at midnight, neon reflections on wet pavement".
+- **Use negative prompts.** In the **Negative Prompt** field below the main prompt, enter terms that describe what you want to avoid: `blurry, low quality, distorted, watermark, artifacts`. This steers the model away from common failure modes.
+- **Increase inference steps.** Raise the **Inference Steps** setting to 50 or higher. The generation will take longer, but the frame quality improves significantly.
+- **Increase resolution.** Move up from 512×512 to 768×768 for sharper detail. Keep in mind this also increases generation time.
+- **Refine your prompt one variable at a time.** Change one thing per generation so you can clearly see what made the difference.
+
+<Tip>
+  Save your prompt to a plain text file before you start iterating. It's easy to forget what wording produced a result you liked. Keeping a running log of your prompts — with notes on what worked and what didn't — builds a personal library you'll return to again and again.
+</Tip>

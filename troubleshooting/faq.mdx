@@ -1,0 +1,90 @@
+---
+title: "TextToVid AI Frequently Asked Questions"
+sidebarTitle: "FAQ"
+description: "Answers to the most common questions about TextToVid AI: model compatibility, system requirements, output formats, privacy, and licensing."
+---
+
+Here are answers to the questions most commonly asked by TextToVid AI users. If your question isn't covered here, check the relevant configuration or troubleshooting pages, or reach out through **Help → Contact Support**.
+
+## General
+
+<AccordionGroup>
+  <Accordion title="Is an internet connection required?">
+    No. TextToVid AI works entirely offline. All inference runs locally on your machine using the GGUF model files stored on your disk. No prompts, images, videos, or any other data are sent to any server at any time during generation.
+  </Accordion>
+
+  <Accordion title="Does TextToVid AI work on Apple Silicon (M1/M2/M3)?">
+    Yes. TextToVid AI fully supports Apple Silicon Macs and enables **Metal** GPU acceleration automatically when it detects an M-series chip. You don't need to configure anything — it works out of the box. Metal acceleration provides performance comparable to a mid-range discrete GPU on Intel systems.
+  </Accordion>
+
+  <Accordion title="Can I use TextToVid AI commercially?">
+    The videos you generate are yours to use however you like, subject to two considerations. First, check the license for your edition of TextToVid AI — the Personal and Commercial editions have different terms for commercial use. Second, check the license of the specific GGUF model you're using. Some models (particularly those derived from certain base models) carry restrictions on commercial use that apply to outputs generated with them. You can usually find this information on the model's HuggingFace page.
+  </Accordion>
+
+  <Accordion title="How do I update TextToVid AI?">
+    Go to **Help → Check for Updates**. TextToVid AI also notifies you with a banner in the main window when an update is available. Updates are downloaded and installed without requiring you to reinstall the application from scratch, and your settings, profiles, and model registrations are preserved.
+  </Accordion>
+</AccordionGroup>
+
+## Models
+
+<AccordionGroup>
+  <Accordion title="Which GGUF models are compatible?">
+    TextToVid AI is compatible with GGUF models from the **LLaMA**, **Mistral**, and **Phi** architecture families. For best results, use instruction-tuned variants of these models rather than base models. To browse a curated list of tested and verified compatible models, go to **Settings → Models → Browse Compatible Models**.
+  </Accordion>
+
+  <Accordion title="Can I use multiple models?">
+    Yes. You can register as many models as you want in **Settings → Models**. Switch between them using the **Model** dropdown in the main panel. Only the currently active model is loaded into RAM — switching models unloads the previous one (unless Model Cache is enabled, in which case both stay resident until you manually unload one).
+  </Accordion>
+
+  <Accordion title="Where do I store my model files?">
+    Anywhere on your system. The default path TextToVid AI watches for models is `~/TextToVidAI/models/`, but you can store `.gguf` files in any directory and register them by pointing to their path in **Settings → Models → Add Model**. Storing models on a fast SSD reduces load times noticeably for large files.
+  </Accordion>
+
+  <Accordion title="How large are GGUF model files?">
+    Typical sizes range from **2 GB to 12 GB**, depending on the number of model parameters and the quantization level. As a rough guide:
+
+    | Quantization | File Size (7B model) | Quality |
+    |---|---|---|
+    | Q2_K | ~2.5 GB | Low |
+    | Q4_K_M | ~4.1 GB | Good |
+    | Q5_K_M | ~4.8 GB | Very good |
+    | Q8_0 | ~7.2 GB | Near-lossless |
+
+    `Q4_K_M` and `Q5_K_M` offer the best balance of quality and file size for most use cases.
+  </Accordion>
+</AccordionGroup>
+
+## Generation
+
+<AccordionGroup>
+  <Accordion title="How long does generation take?">
+    Generation time depends on your hardware, resolution, video duration, and inference steps. As a practical reference: with an 8 GB VRAM GPU, a 5-second 512×512 video at 40 inference steps takes approximately **3 minutes**. The same job on a CPU-only machine takes roughly **45 minutes**. See the [Performance Benchmarks](/configuration/performance#performance-benchmarks) for a fuller comparison table.
+  </Accordion>
+
+  <Accordion title="Can I pause and resume generation?">
+    Yes. Click **Pause** in the generation panel at any time. TextToVid AI saves partial progress to disk (including all completed frames) and resumes from the last completed frame when you click **Resume**. You can also close and reopen the app — paused jobs appear in the queue and resume normally.
+  </Accordion>
+
+  <Accordion title="What's the maximum video length?">
+    Each generation job can produce up to **60 seconds** of video. For longer content, generate multiple segments and combine them in a video editor. Keeping jobs under 30 seconds also reduces peak memory usage, which helps avoid out-of-memory errors on machines with limited RAM.
+  </Accordion>
+
+  <Accordion title="Can I add audio to generated videos?">
+    TextToVid AI generates silent videos — audio generation is not currently supported. To add music, voiceover, or sound effects, import your exported video into a video editor such as **DaVinci Resolve** (free), **CapCut**, or **Adobe Premiere Pro**. The MP4 output from TextToVid AI is compatible with all major editing tools.
+  </Accordion>
+</AccordionGroup>
+
+## Privacy & Data
+
+<AccordionGroup>
+  <Accordion title="Does TextToVid AI collect my prompts?">
+    No. When running in offline mode — the default — nothing is sent anywhere. Your prompts, generated videos, model files, and settings never leave your machine.
+
+    If you choose to opt into anonymous usage statistics (**Settings → Privacy → Share Anonymous Usage Data**), only aggregate performance metrics are shared (such as average generation time and which features are used). Your prompts, video content, and personal information are never included.
+  </Accordion>
+
+  <Accordion title="Are my generated videos stored anywhere?">
+    Videos are saved only to the output directory you specify — by default `~/Videos/TextToVidAI/`, or wherever you choose to export. TextToVid AI does not upload, copy, or store your videos anywhere else. Deleting the file from your output directory is all you need to do to remove it permanently.
+  </Accordion>
+</AccordionGroup>

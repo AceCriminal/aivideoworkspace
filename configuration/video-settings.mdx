@@ -1,0 +1,105 @@
+---
+title: "Video Output and Export Settings Reference"
+sidebarTitle: "Video Settings"
+description: "Full reference for TextToVid AI's video output settings: resolution, frame rate, codecs, containers, quality presets, and default export paths."
+---
+
+Video settings determine the technical specifications of your output files — resolution, frame rate, codec, and export location. These settings have a direct impact on both generation time and the final file size and quality. You can access them at any time through **Settings → Video**, or adjust them directly in the main panel before starting a generation job.
+
+## Parameters
+
+<ParamField path="resolution" type="enum" default="512x512">
+  The pixel dimensions of the output video. Higher resolutions produce sharper, more detailed videos but increase generation time and memory usage significantly.
+
+  | Value | Description |
+  |---|---|
+  | `256x256` | Fastest generation, useful for quick drafts |
+  | `512x512` | Default — good balance of quality and speed |
+  | `768x768` | High quality square output |
+  | `1024x576` | Widescreen HD (16:9) |
+  | `1280x720` | Full 720p HD — slowest, highest quality |
+</ParamField>
+
+<ParamField path="fps" type="integer" default={12}>
+  Frames per second of the output video. Higher frame rates produce smoother motion but require more frames to be generated, increasing total generation time proportionally.
+
+  **Options:** 8, 12, 24, 30
+</ParamField>
+
+<ParamField path="duration" type="integer" default={5}>
+  Length of the generated video in seconds. Total frames generated equals `fps × duration`, so longer durations at higher frame rates take substantially more time.
+
+  **Range:** 1–60 seconds
+</ParamField>
+
+<ParamField path="steps" type="integer" default={40}>
+  Number of inference steps per frame. More steps generally produce higher quality, more detailed frames at the cost of longer generation time. Values below 20 often result in blurry or incoherent frames.
+
+  **Range:** 10–200
+</ParamField>
+
+<ParamField path="codec" type="enum" default="h264">
+  The video codec used to encode output frames. Choose based on your intended use — playback, web delivery, or further editing.
+
+  | Value | Best For |
+  |---|---|
+  | `h264` | Universal playback, smallest file size |
+  | `vp9` | Web delivery, open format |
+  | `gif` | Short looping clips, browser-compatible |
+  | `png_sequence` | Lossless editing, largest file size |
+</ParamField>
+
+<ParamField path="container" type="enum" default="mp4">
+  The output file container format. Must be compatible with the selected codec — TextToVid AI will warn you if there is a mismatch.
+
+  **Options:** `mp4`, `webm`, `gif`, `png`
+</ParamField>
+
+<ParamField path="quality" type="integer" default={80}>
+  CRF-style quality setting for `h264` and `vp9` codecs. This controls the trade-off between file size and visual quality. Lower values produce larger files with better quality; higher values compress more aggressively.
+
+  **Range:** 0 (lossless) – 100 (maximum compression)
+</ParamField>
+
+<ParamField path="output_dir" type="path" default="~/Videos/TextToVidAI/">
+  The directory where exported videos are saved by default. TextToVid AI creates this directory automatically if it doesn't exist. You can override this path per-job in the export dialog.
+</ParamField>
+
+<ParamField path="auto_export" type="boolean" default={false}>
+  When enabled, TextToVid AI automatically exports the finished video to the output directory after each generation without showing a save dialog. Useful for batch jobs where you want hands-free output.
+</ParamField>
+
+<ParamField path="filename_template" type="string" default="{date}_{seed}_{resolution}">
+  Template string used to generate output filenames automatically. Combine tokens to build filenames that are descriptive and sortable. The extension is appended automatically based on the selected container.
+
+  Available tokens:
+
+  | Token | Replaced With |
+  |---|---|
+  | `{date}` | Generation date (YYYYMMDD) |
+  | `{time}` | Generation time (HHMMSS) |
+  | `{seed}` | The seed used for this generation |
+  | `{resolution}` | Output resolution (e.g., `512x512`) |
+  | `{fps}` | Frame rate used |
+  | `{steps}` | Inference steps used |
+  | `{prompt_words}` | First 5 words of the prompt, joined by underscores |
+</ParamField>
+
+## Quality Presets
+
+TextToVid AI includes three built-in quality presets that set a group of video parameters at once. Select a preset from the **Preset** dropdown in **Settings → Video** or in the main panel.
+
+| Setting | Draft | Standard | High Quality |
+|---|---|---|---|
+| Resolution | `256x256` | `512x512` | `1280x720` |
+| FPS | 8 | 12 | 24 |
+| Duration | 5s | 5s | 5s |
+| Inference Steps | 15 | 40 | 80 |
+| Codec | `h264` | `h264` | `h264` |
+| Quality | 65 | 80 | 95 |
+
+You can use a preset as a starting point and then override individual settings — presets do not lock any values.
+
+<Tip>
+  The `{prompt_words}` token in the filename template uses the first 5 words of your prompt, which makes it easy to identify a video at a glance in your file explorer without opening it. Combine it with `{seed}` and `{date}` for a filename that is both human-readable and unique: `{date}_{prompt_words}_{seed}`.
+</Tip>

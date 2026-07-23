@@ -1,0 +1,80 @@
+---
+title: "Troubleshoot GGUF Model Loading and Inference Errors"
+sidebarTitle: "Model Errors"
+description: "Diagnose and fix GGUF model errors in TextToVid AI including model not found, unsupported format, tokenizer errors, and inference failures."
+---
+
+Model errors are the most common class of issues in TextToVid AI and usually have straightforward fixes. Most of them come down to one of three root causes: the model file can't be found, the file itself is invalid or incomplete, or the model's configuration doesn't match your current hardware or settings. Work through the relevant section below to resolve the error shown in the model status indicator.
+
+<Tip>
+  Before troubleshooting manually, use the built-in checksum tool at **Settings → Models → Verify Integrity**. It compares the file against its expected checksum and immediately tells you whether the file is complete and unmodified. This is the fastest way to rule out a corrupted or partial download.
+</Tip>
+
+## Errors
+
+<Accordion title='"Model not found" or "Failed to load model"'>
+  This error appears when TextToVid AI can't locate the `.gguf` file at the path it has stored — usually because the file has been moved, renamed, or deleted since it was registered.
+
+  **To fix:**
+
+  1. Go to **Settings → Models**.
+  2. Find the model showing a red error icon.
+  3. Click **Edit** next to that model entry.
+  4. Update the **File Path** field to point to the new location of the `.gguf` file.
+  5. Click **Save** — TextToVid AI will verify the path immediately and clear the error if the file is found.
+
+  Alternatively, click **Remove** to delete the model entry, then use **Add Model** to re-register it at its current location.
+</Accordion>
+
+<Accordion title='"Unsupported model format"'>
+  This error means the file TextToVid AI found is not a valid GGUF file. It could be an older GGML format, a partially downloaded file, or a different file type entirely.
+
+  **To fix:**
+
+  1. **Re-download the model from HuggingFace.** Ensure the filename ends in `.gguf`. GGML files (older format, no extension or `.bin`) are not compatible.
+  2. **Verify the download completed fully.** Compare the file size on your disk to the size listed on the HuggingFace model page. A mismatch indicates an incomplete download — delete the file and download it again.
+  3. **Run the integrity check.** Use **Settings → Models → Verify Integrity** to confirm the file matches its expected checksum.
+</Accordion>
+
+<Accordion title='"Tokenizer error" or "Failed to initialize tokenizer"'>
+  Some GGUF models bundle their tokenizer inside the file, but others require a separate `tokenizer.json` file to be present alongside them. This error means the required tokenizer data couldn't be found or loaded.
+
+  **To fix:**
+
+  1. Check the model's HuggingFace page — look in the **Files** tab for a `tokenizer.json` or `tokenizer_config.json` file.
+  2. Download that file and place it in the **same directory** as your `.gguf` file.
+  3. Reload the model in TextToVid AI.
+
+  If the error persists, try a different model from the same architecture family — some specific model variants have tokenizer compatibility issues that are resolved in later releases.
+</Accordion>
+
+<Accordion title='"Context length exceeded"'>
+  This error means your prompt contains more tokens than the model's current `context_length` setting allows. The model cannot process input longer than its configured context window.
+
+  **To fix:**
+
+  - **Increase `context_length`** in **Settings → Models → Configure**. You can increase it up to the model's architectural maximum (check the model card on HuggingFace for this limit). Note that higher context length uses more RAM.
+  - **Shorten your prompt.** Remove redundant phrases, reduce descriptive detail, or split a very long prompt into a shorter, more focused version. A well-crafted concise prompt often outperforms a very long one.
+</Accordion>
+
+<Accordion title='"CUDA out of memory" (GPU error)'>
+  This GPU-specific error means TextToVid AI tried to allocate more VRAM than your GPU has available. It's separate from system RAM errors and requires adjusting GPU-specific settings.
+
+  **To fix:**
+
+  1. **Reduce `gpu_layers`** in **Settings → Models → Configure**. Try reducing by 5–10 layers at a time until the error stops.
+  2. **Lower resolution or inference steps** — both reduce per-frame VRAM requirements during generation.
+  3. **Ensure no other GPU-intensive applications are running.** Games, video editors, or other machine learning tools consume VRAM that TextToVid AI needs. Close them before generating.
+  4. If you continue to hit VRAM limits, switch to a lower quantization model (e.g., `Q4_K_M` instead of `Q6_K`) which has a smaller memory footprint.
+</Accordion>
+
+<Accordion title="Model generates nonsensical or irrelevant output">
+  If the model loads and runs without errors but the video descriptions it generates are incoherent, repetitive, or completely unrelated to your prompt, the issue is usually with model type, settings, or prompt compatibility.
+
+  **To fix:**
+
+  1. **Lower the temperature.** A `temperature` above 1.0 introduces so much randomness that output becomes incoherent. Try 0.5–0.7 for more grounded, coherent outputs.
+  2. **Verify model compatibility.** TextToVid AI works best with **instruction-tuned** GGUF models — models specifically fine-tuned to follow instructions and produce structured descriptions. Base models (not instruction-tuned) often produce output that doesn't resemble a video prompt. Check the model card for fine-tuning details.
+  3. **Use a fixed seed for testing.** Set `seed` to a specific number and run the same prompt several times to check for consistency. If results are consistent but wrong, the issue is the model or prompt. If results are wildly inconsistent, lower `temperature`.
+  4. **Update TextToVid AI.** Newer versions include prompt formatting improvements and model compatibility updates. Go to **Help → Check for Updates**.
+</Accordion>

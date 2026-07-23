@@ -1,0 +1,86 @@
+---
+title: "Configure Video Output Settings in TextToVid AI"
+sidebarTitle: "Output Settings"
+description: "Set resolution, frame rate, duration, codec, and export path in TextToVid AI to match your target platform and quality requirements."
+---
+
+TextToVid AI gives you full control over every technical aspect of your generated video — from the pixel dimensions and frame rate all the way through to the codec used for export. Understanding what each setting does and how it affects both quality and generation time lets you make deliberate trade-offs rather than guessing. This guide walks through every output setting in the application.
+
+## Resolution Settings
+
+Resolution determines how many pixels are in each frame. Higher resolutions produce sharper, more detailed video but require significantly more processing time and memory. Choose the resolution that matches your intended use case — there's no reason to generate at 1280×720 if you're making a quick draft to test a prompt.
+
+| Resolution | Aspect Ratio | Best For | Gen Time |
+|---|---|---|---|
+| 256×256 | 1:1 | Quick drafts, prompt testing | Very fast |
+| 512×512 | 1:1 | Standard quality, general use | Fast |
+| 768×768 | 1:1 | High quality output | Moderate |
+| 1024×576 | 16:9 | Widescreen content | Slow |
+| 1280×720 | 16:9 | HD output, final renders | Very slow |
+
+A practical workflow is to test and iterate your prompt at 256×256 or 512×512 until you're happy with the content, then do a single final generation at your target resolution. This saves substantial time during the iteration phase.
+
+## Frame Rate
+
+Frame rate controls how many individual frames are generated per second of video. A higher frame rate means more frames to generate, which increases both generation time and file size.
+
+Use these guidelines when choosing your FPS:
+
+- **8 FPS** — works well for dreamlike, abstract, or stylized content where smooth motion isn't the goal; also useful for very long duration clips where generation time is a concern
+- **12 FPS** — a good general-purpose default; gives the impression of fluid motion for most scene types without the overhead of higher frame rates
+- **24 FPS** — the standard film frame rate; produces a cinematic feel and noticeably smoother motion than 12 FPS, at roughly double the generation time
+- **30 FPS** — best for realistic motion content where smoothness is a priority, such as nature footage, sports, or anything with fast-moving subjects
+
+If you're unsure, start at 12 FPS. You can always regenerate at a higher frame rate once you've confirmed your prompt and settings produce the scene you want.
+
+## Duration
+
+The **Duration** slider in the generation panel controls how many seconds of video TextToVid AI generates, from a minimum of 1 second up to a maximum of 60 seconds.
+
+Keep in mind that generation time scales directly with duration. Every additional second of video requires the model to generate a number of new frames equal to your FPS setting. A 10-second video at 24 FPS means 240 frames; a 30-second video at the same frame rate means 720 frames — three times as many.
+
+For prompt testing, keep duration at 3–5 seconds. For a final polished output, generate at your full intended duration once you've locked in your settings.
+
+## Inference Steps
+
+Inference steps control how many refinement passes the model makes on each frame. More steps produce cleaner, sharper frames but take longer to generate. Fewer steps are faster but produce softer, less detailed output.
+
+<Tabs>
+  <Tab title="Draft (20–30 steps)">
+    Use draft-level steps when you're iterating on a prompt and want to see results quickly. Output at this level will look noticeably soft and may have some artifacts, but it's more than enough to evaluate whether your prompt is producing the right scene composition and motion. Draft mode is also useful when testing new resolution or duration settings before committing to a full-quality render.
+  </Tab>
+  <Tab title="Standard (40–50 steps)">
+    Standard steps are the right choice for most generations where you want a balance between quality and time. Output at 40–50 steps is clean enough for most practical uses — social media, prototyping, client previews — while still completing in a reasonable amount of time on mid-range hardware. This is the recommended starting point if you're not sure what to use.
+  </Tab>
+  <Tab title="High Quality (80–100 steps)">
+    High-quality step counts are for final renders where maximum output quality is the priority and generation time is not a constraint. At 80–100 steps, frames are significantly sharper and more coherent, with fewer artifacts and better consistency across the length of the clip. Use this setting for deliverable-quality output, overnight renders, or any video you plan to share publicly.
+  </Tab>
+</Tabs>
+
+## Export Format
+
+TextToVid AI supports four export formats. Choose based on where you plan to use the video:
+
+**MP4 (H.264)**
+The best default choice for almost every use case. MP4 files are small, widely supported across all platforms and devices, and easy to share or upload. Use MP4 unless you have a specific reason to choose something else.
+
+**WebM (VP9)**
+An open-format alternative to MP4 that's well-suited for embedding video on websites. WebM files are slightly larger than MP4 at equivalent quality but avoid licensing considerations associated with H.264. Choose WebM if you're embedding the video in a web project.
+
+**GIF**
+Produces an animated GIF — no audio, limited to 256 colors, and significantly larger file sizes than video formats for equivalent duration. GIF is best for very short clips (under 5 seconds) intended for use on platforms that don't support video embeds. Quality will be visibly lower than MP4.
+
+**PNG Sequence**
+Exports each frame of the video as a separate numbered PNG file. Use this format if you plan to edit the video in a compositing application or video editor that requires frame-by-frame access. PNG sequences are uncompressed and produce large collections of files, but they preserve maximum frame quality for downstream editing.
+
+## Output Directory
+
+By default, TextToVid AI saves exported files to your system's default Videos folder. You can change this to any location on your computer.
+
+To set a permanent default output directory, go to **Settings → Output → Default Directory**, click **Browse**, navigate to your preferred folder, and click **Select**. All future exports will default to this location unless you manually choose a different path at export time.
+
+## Presets
+
+<Tip>
+  TextToVid AI includes three built-in preset configurations — **Draft**, **Standard**, and **High Quality** — that set resolution, FPS, duration, and inference steps all at once. Access them from the **Preset** dropdown at the top of the generation panel. Starting from a preset and adjusting individual settings from there is faster than configuring everything from scratch, especially when you're learning what each setting does.
+</Tip>

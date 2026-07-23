@@ -1,0 +1,79 @@
+---
+title: "Optimize TextToVid AI Performance on Your Hardware"
+sidebarTitle: "Performance"
+description: "Tune TextToVid AI for faster video generation by configuring GPU offloading, CPU threads, memory limits, and caching settings."
+---
+
+TextToVid AI runs entirely on your hardware — no cloud processing, no queues, no external dependencies. That means generation speed depends directly on how well you configure the app to use your CPU, GPU, and available memory. These settings help you get the best generation speed without running out of memory or starving other applications on your system.
+
+## GPU vs CPU Generation
+
+The single most impactful performance decision is whether to use your GPU for inference. GPU generation is typically **5–20× faster** than CPU-only generation, depending on your hardware and the model size. If you have a dedicated GPU with at least 4 GB of VRAM, enabling GPU offloading is strongly recommended.
+
+CPU generation still works on any machine — including laptops with no discrete GPU — but you should expect generation times measured in tens of minutes rather than a few minutes for typical settings.
+
+To enable GPU acceleration, go to **Settings → Performance → Acceleration**, select your GPU from the device list, and set `gpu_layers` to a value greater than 0 (or `-1` for automatic full offload). TextToVid AI supports **CUDA** (NVIDIA), **ROCm** (AMD), and **Metal** (Apple Silicon) backends.
+
+## GPU Offloading (`gpu_layers`)
+
+The `gpu_layers` setting controls how many layers of the model are offloaded to your GPU. Each layer offloaded reduces the work the CPU has to do, speeding up inference. You don't need to offload all layers to see a benefit — even partial offloading with a modest GPU provides a significant speedup over CPU-only operation.
+
+Use this table as a starting point, then adjust based on observed VRAM usage during generation:
+
+| GPU VRAM | Recommended `gpu_layers` Setting |
+|---|---|
+| 4 GB | 10–20 layers |
+| 6 GB | 20–30 layers |
+| 8 GB | 35 layers |
+| 12 GB+ | `-1` (full offload) |
+
+Partial offload — where some layers run on the GPU and the remainder run on the CPU — is fully supported and still gives a substantial speedup compared to CPU-only. If you see a VRAM overflow error, reduce `gpu_layers` by 5 and try again.
+
+## Memory Management
+
+These settings are available under **Settings → Performance → Memory** and help you prevent out-of-memory errors on machines with limited RAM.
+
+**Max RAM**
+Set a hard cap on how much system RAM TextToVid AI is allowed to use. This is useful on machines where other applications (browsers, creative tools, virtual machines) also need significant memory. If the app hits this limit during generation, it will reduce internal buffer sizes automatically rather than crashing.
+
+**Model Cache**
+When enabled, TextToVid AI keeps the loaded model resident in RAM between generation jobs. This eliminates the model loading delay (which can be 30–60 seconds for large models) at the cost of keeping that memory occupied until you close the app or manually unload the model. Enable this if you're running multiple generations in a session; disable it if you need to free memory for other tasks between runs.
+
+**Frame Buffer Size**
+Controls how many video frames are held in memory simultaneously during the assembly phase. If you run out of RAM mid-generation — particularly on longer videos at high resolutions — reduce this value. A lower frame buffer means slightly more disk I/O during assembly but prevents crashes.
+
+## CPU Thread Tuning
+
+When running on CPU (or using partial GPU offload), the `cpu_threads` setting controls how many threads are used for inference. More threads generally means faster generation, up to the number of physical cores on your machine.
+
+Follow these guidelines for best results:
+
+- **Do not exceed your physical core count.** Hyperthreaded (logical) cores do not improve inference speed and can actually slow it down for this workload.
+- **Leave 2 threads free for the OS** and background processes to stay responsive while generating.
+
+Use this formula to find the recommended value for your machine:
+
+```
+recommended_threads = total_physical_cores - 2
+```
+
+For example, on an 8-core CPU, set `cpu_threads` to **6**. On a 4-core CPU, set it to **2**.
+
+## Performance Benchmarks
+
+The table below shows approximate generation times on representative hardware configurations. Use these as a rough guide when choosing settings.
+
+| Setup | Resolution | Duration | Steps | Est. Time |
+|---|---|---|---|---|
+| CPU only (8-core) | 256×256 | 5s @ 12fps | 30 | ~15 min |
+| CPU only (8-core) | 512×512 | 5s @ 12fps | 40 | ~45 min |
+| GPU 8 GB VRAM | 512×512 | 5s @ 12fps | 40 | ~3 min |
+| GPU 8 GB VRAM | 1280×720 | 10s @ 24fps | 50 | ~25 min |
+
+<Note>
+  Generation times vary significantly based on model size, quantization level, and other software running on your system. The figures above are measured on a mid-range system and are intended as a relative guide, not a guarantee. Run a short draft generation to calibrate expected times on your own hardware.
+</Note>
+
+<Tip>
+  Use the **Draft** quality preset for all early-stage iterations — it runs at 256×256 with only 15 inference steps, so you can evaluate prompt wording, pacing, and style in a fraction of the time. Switch to the **High Quality** preset only once you're satisfied with the creative direction and ready to produce your final output.
+</Tip>

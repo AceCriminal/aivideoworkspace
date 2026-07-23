@@ -1,0 +1,71 @@
+---
+title: "TextToVid AI: AI Video Generation from Text Prompts"
+sidebarTitle: "Introduction"
+description: "TextToVid AI generates videos from text using local GGUF models. Learn what makes it different: fully offline, no subscriptions, runs on your hardware."
+---
+
+TextToVid AI is a desktop application that turns plain-language text prompts into AI-generated videos — all on your own hardware, with no cloud services involved. If you've ever wanted to visualize a scene, prototype a video concept, or experiment with generative media without signing up for a subscription or sharing your data with a third party, TextToVid AI was built for you.
+
+## What is TextToVid AI?
+
+TextToVid AI bridges the gap between written imagination and moving visuals. You write a text prompt describing the scene or video you have in mind — the setting, mood, lighting, motion, and any other details you want to include. TextToVid AI passes that prompt to a locally installed GGUF language model, which interprets your description and drives a frame generation pipeline. Those frames are assembled in sequence, processed for temporal consistency, and rendered into a finished video file that you can export and use however you like.
+
+The entire process happens on your machine. There are no API calls to external servers, no content filters imposed by a third-party provider, and no waiting in a cloud queue. The speed and quality of generation depend on your hardware, but even a mid-range machine with a dedicated GPU can produce short videos in a matter of minutes.
+
+## Why Local AI?
+
+Running AI on your own hardware rather than in the cloud comes with meaningful advantages:
+
+- **Privacy by default.** Your prompts, your generated content, and any reference images you provide never leave your machine. There is no telemetry, no training data collection, and no remote logging.
+- **No subscription costs.** TextToVid AI is a one-time install. You choose which GGUF models to download, and many high-quality models are freely available. There are no per-generation fees, no monthly plans, and no credit systems.
+- **Works completely offline.** Once the app and your chosen model are installed, you need no internet connection to generate videos. Work on a plane, in a remote location, or in any air-gapped environment.
+- **Full control over your model.** You decide which model to use, when to update it, and how to configure it. You are not subject to a provider changing, deprecating, or rate-limiting the model underneath you.
+
+## System Requirements
+
+Before installing TextToVid AI, make sure your machine meets the following specifications:
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| **Operating System** | Windows 10, macOS 12 Monterey, Ubuntu 20.04 | Windows 11, macOS 14 Sonoma, Ubuntu 22.04+ |
+| **RAM** | 16 GB | 32 GB or more |
+| **Storage** | 5 GB for the app + space for models (4–20 GB each) | SSD with 50 GB+ free for models and output |
+| **GPU** | Optional (CPU generation is supported) | NVIDIA with 8 GB+ VRAM, AMD RX 6000+, or Apple Silicon |
+| **CPU** | 4-core x86-64 or Apple Silicon | 8-core or higher |
+
+<Note>
+  GPU acceleration is strongly recommended for practical generation speeds. Without a GPU, generating even a short 5-second video at low resolution can take 20–60 minutes depending on your CPU. With a supported GPU, the same video typically takes 2–5 minutes.
+</Note>
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Fully Offline Operation" icon="wifi-slash">
+    TextToVid AI runs entirely on your hardware. No prompts, frames, or videos are ever transmitted to external servers.
+  </Card>
+  <Card title="GGUF Model Support" icon="brain">
+    Load any compatible GGUF-format model. Choose from lightweight quantized models for speed or larger models for higher fidelity output.
+  </Card>
+  <Card title="GPU Acceleration" icon="microchip">
+    NVIDIA CUDA, AMD ROCm, and Apple Metal are all supported, with automatic hardware detection on launch.
+  </Card>
+  <Card title="Batch Generation" icon="layer-group">
+    Queue multiple prompts and generate them in sequence without supervising each job manually.
+  </Card>
+  <Card title="Granular Prompt Control" icon="pen-to-square">
+    Write positive and negative prompts, adjust inference steps, guidance scale, and seed values for repeatable results.
+  </Card>
+  <Card title="Flexible Export Options" icon="file-export">
+    Export as MP4, WebM, or GIF. Save raw frame sequences as PNG files for further editing in external tools.
+  </Card>
+  <Card title="Model Manager" icon="folder-open">
+    Add, remove, and switch between GGUF models from directly within the app. No manual file management required.
+  </Card>
+  <Card title="Generation History" icon="clock-rotate-left">
+    Every generation is logged with its prompt, settings, and output path so you can revisit and reproduce past results.
+  </Card>
+</CardGroup>
+
+<Note>
+  GPU acceleration via **NVIDIA CUDA** (version 11.8 and above) and **Apple Metal** (on M1, M2, and M3 chips) is fully supported and automatically enabled when compatible hardware is detected. AMD ROCm acceleration is supported on Linux. See the [Installation guide](/installation) for driver setup instructions.
+</Note>

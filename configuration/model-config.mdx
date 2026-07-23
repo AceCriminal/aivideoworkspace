@@ -1,0 +1,55 @@
+---
+title: "Model Configuration Settings in TextToVid AI"
+sidebarTitle: "Model Config"
+description: "Configure GGUF model parameters in TextToVid AI including context length, temperature, seed, and thread count to tune generation quality."
+---
+
+Model configuration settings let you fine-tune how the GGUF model interprets your prompts and generates video instructions. Adjusting these parameters gives you control over the trade-off between generation quality, creativity, speed, and memory usage. To open the configuration panel for any model, navigate to **Settings → Models**, select the model you want to tune, and click **Configure**.
+
+## Parameters
+
+<ParamField path="context_length" type="integer" default={2048}>
+  The number of tokens the model considers at once. Longer context allows more complex, detailed prompts but requires significantly more RAM. Keep this value proportional to your typical prompt length.
+
+  **Range:** 512–8192
+</ParamField>
+
+<ParamField path="temperature" type="float" default={0.7}>
+  Controls the randomness of the model's output. Lower values (0.1–0.5) produce more predictable and consistent video descriptions, which is useful when you need reliable, repeatable results. Higher values (0.7–1.5) produce more creative and varied outputs.
+
+  **Range:** 0.1–2.0
+</ParamField>
+
+<ParamField path="top_p" type="float" default={0.9}>
+  Nucleus sampling threshold. The model only considers the smallest set of tokens whose cumulative probability exceeds this value. Lower values make the output more focused and deterministic. Keep between 0.7–0.95 for a good balance of coherence and variety.
+
+  **Range:** 0.0–1.0
+</ParamField>
+
+<ParamField path="seed" type="integer" default={-1}>
+  Random seed for reproducibility. Set to `-1` to use a different random seed on every generation run. Set a specific positive integer to reproduce the exact same video output from the same prompt and settings.
+
+  **Default:** -1 (random)
+</ParamField>
+
+<ParamField path="cpu_threads" type="integer" default="auto">
+  Number of CPU threads to use for inference. Defaults to the number of physical cores detected on your machine. Reduce this value if other applications become sluggish during generation — leaving 2 threads free for the OS is generally a good practice.
+</ParamField>
+
+<ParamField path="gpu_layers" type="integer" default="auto">
+  Number of model layers to offload to the GPU. Set to `-1` for automatic full GPU offload (TextToVid AI will use as much VRAM as available). Set to `0` to run entirely on the CPU. Higher values speed up generation but require more VRAM — if you exceed your VRAM, the app will fall back to CPU for the remaining layers.
+</ParamField>
+
+## Saving Configurations
+
+Once you've tuned a set of parameters that works well for a particular type of generation, you can save it as a named profile so you don't have to reconfigure manually each time.
+
+To save a profile, go to **Settings → Models → Save Profile**, give it a descriptive name (for example, "Creative High-RAM" or "Fast Draft"), and click **Save**. You can load any saved profile from the same menu, or assign a specific profile to a batch job in the batch queue — useful when different jobs in the same queue need different quality settings.
+
+<Tip>
+  Use a fixed seed when iterating on a prompt. Set `seed` to any specific number, then adjust your prompt wording or other parameters one change at a time. Because the randomness is held constant, differences in the output are caused purely by your changes — making it much easier to pinpoint what's working.
+</Tip>
+
+<Warning>
+  Setting `context_length` too high can consume all available system RAM and cause TextToVid AI — or your entire system — to crash. Start at the default of 2048 and increase only if your prompts are long and detailed enough to justify it. Monitor RAM usage in **Settings → Performance → Memory** while generating.
+</Warning>

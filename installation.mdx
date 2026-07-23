@@ -1,0 +1,200 @@
+---
+title: "Install TextToVid AI on Windows, macOS, and Linux"
+sidebarTitle: "Installation"
+description: "Step-by-step installation instructions for TextToVid AI on Windows, macOS, and Linux, including GPU driver setup for faster video generation."
+---
+
+TextToVid AI is available as a native desktop application for Windows, macOS, and Linux. You can download the latest installer from the [official releases page](https://github.com/texttovid-ai/releases). All three platforms support CPU-based generation out of the box, with optional GPU acceleration available for significantly faster performance.
+
+<Warning>
+  Some antivirus and endpoint security tools flag AI desktop applications as suspicious because they load large binary model files and perform intensive local computation. If your antivirus quarantines or blocks the TextToVid AI installer or executable, add it to your allowlist. The app does not make outbound network connections during use, and all installers are signed and published exclusively through the official releases page.
+</Warning>
+
+## Platform Installation
+
+<Tabs>
+  <Tab title="Windows">
+    <Steps>
+      <Step title="Download the Installer">
+        Go to the [releases page](https://github.com/texttovid-ai/releases) and download `TextToVidAI-Setup.exe` for the latest stable release.
+      </Step>
+      <Step title="Run the Installer as Administrator">
+        Right-click `TextToVidAI-Setup.exe` and select **Run as administrator**. This ensures the installer can write to the required program directories and register the application.
+
+        If **Windows Defender SmartScreen** displays a warning that the app is unrecognized, click **More info** and then **Run anyway**. This prompt appears because SmartScreen requires a large number of downloads before it trusts a new publisher signature.
+      </Step>
+      <Step title="Follow the Setup Wizard">
+        Accept the license agreement, choose an installation directory (the default `C:\Program Files\TextToVid AI` is recommended), and click **Install**. The wizard installs the application and creates Start Menu and Desktop shortcuts.
+      </Step>
+      <Step title="Launch TextToVid AI">
+        Open TextToVid AI from the **Start Menu** or the **Desktop** shortcut. The app performs a one-time hardware detection on first launch and reports your CPU, RAM, and any detected GPU in **Settings → About → Hardware**.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="macOS">
+    <Steps>
+      <Step title="Download the Disk Image">
+        Go to the [releases page](https://github.com/texttovid-ai/releases) and download `TextToVidAI.dmg`. The disk image is compatible with macOS 12 Monterey and later, on both Intel and Apple Silicon Macs.
+      </Step>
+      <Step title="Open the Disk Image and Install">
+        Double-click `TextToVidAI.dmg` to mount it. When the installer window opens, drag the **TextToVid AI** icon into the **Applications** folder shortcut.
+      </Step>
+      <Step title="Bypass Gatekeeper on First Launch">
+        Because TextToVid AI is distributed outside the Mac App Store, macOS Gatekeeper will block it on the first open attempt. To launch it:
+
+        1. Open **Finder → Applications**.
+        2. Right-click (or Control-click) **TextToVid AI**.
+        3. Select **Open** from the context menu.
+        4. In the dialog that appears, click **Open** again to confirm.
+
+        You only need to do this once. Subsequent launches work normally from Spotlight, the Dock, or the Applications folder.
+      </Step>
+      <Step title="Allow the App in System Settings (if prompted)">
+        If macOS blocks the app and shows a message in **System Settings**, navigate to **System Settings → Privacy & Security**, scroll to the Security section, and click **Open Anyway** next to the TextToVid AI entry.
+      </Step>
+      <Step title="Confirm the App Launches">
+        TextToVid AI opens to the main generation screen. On Apple Silicon Macs (M1, M2, M3), Metal GPU acceleration is detected and enabled automatically — no additional drivers are needed.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Linux">
+    <Steps>
+      <Step title="Download the Package">
+        Go to the [releases page](https://github.com/texttovid-ai/releases) and download the package that suits your distribution:
+
+        - **AppImage** (`TextToVidAI.AppImage`) — works on any modern x86-64 Linux distribution without installation.
+        - **Debian/Ubuntu package** (`texttovid-ai_amd64.deb`) — for Ubuntu 20.04+, Debian 11+, and compatible derivatives.
+      </Step>
+      <Step title="Install via AppImage">
+        Make the AppImage executable and run it:
+
+        ```bash
+        chmod +x TextToVidAI.AppImage
+        ./TextToVidAI.AppImage
+        ```
+
+        To integrate TextToVid AI with your desktop environment (application launcher, file associations), run it with the `--install` flag:
+
+        ```bash
+        ./TextToVidAI.AppImage --install
+        ```
+      </Step>
+      <Step title="Install via .deb Package (Debian/Ubuntu)">
+        Use `dpkg` or `apt` to install the `.deb` package:
+
+        ```bash
+        sudo dpkg -i texttovid-ai_amd64.deb
+        # Fix any dependency issues
+        sudo apt-get install -f
+        ```
+
+        After installation, launch the app from your application menu or by running:
+
+        ```bash
+        texttovid-ai
+        ```
+      </Step>
+      <Step title="Confirm the App Launches">
+        TextToVid AI opens to the main generation screen. Check **Settings → About → Hardware** to confirm the app has detected your CPU and (if applicable) your GPU.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## GPU Acceleration Setup
+
+GPU acceleration is optional but strongly recommended — it can reduce generation time by 10–30× compared to CPU-only mode. TextToVid AI supports NVIDIA CUDA, AMD ROCm, and Apple Metal. Select your hardware below for setup instructions.
+
+<Tabs>
+  <Tab title="NVIDIA (CUDA)">
+    TextToVid AI requires **CUDA Toolkit 11.8 or later**. Most users on recent NVIDIA driver versions will already have this installed.
+
+    <Steps>
+      <Step title="Install or Update NVIDIA Drivers">
+        Download the latest Game Ready or Studio driver for your GPU from [nvidia.com/drivers](https://www.nvidia.com/drivers). A driver version of 520.0 or later is recommended.
+      </Step>
+      <Step title="Install CUDA Toolkit">
+        Download and install CUDA Toolkit 11.8+ from [developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads). Choose the installer type that matches your OS and follow the on-screen instructions.
+      </Step>
+      <Step title="Verify CUDA is Available">
+        Open a terminal or command prompt and run:
+
+        ```bash
+        nvidia-smi
+        ```
+
+        The output should show your GPU model, driver version, and CUDA version. If `nvidia-smi` is not found, your driver installation is incomplete.
+      </Step>
+      <Step title="Confirm Detection in TextToVid AI">
+        Launch TextToVid AI and go to **Settings → About → Hardware**. Your NVIDIA GPU should appear under **Detected GPU** with **CUDA** listed as the acceleration backend.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="AMD (ROCm)">
+    AMD ROCm acceleration is supported on **Linux only**. ROCm is not currently available for Windows or macOS. On unsupported platforms, TextToVid AI falls back to CPU generation automatically.
+
+    <Steps>
+      <Step title="Check ROCm Compatibility">
+        Verify that your GPU is on the [ROCm supported hardware list](https://rocm.docs.amd.com/en/latest/release/gpu_os_support.html). Most AMD RX 6000 and RX 7000 series cards are supported on Ubuntu 20.04 and later.
+      </Step>
+      <Step title="Install ROCm">
+        Follow AMD's official installation guide for your distribution. For Ubuntu, the core commands are:
+
+        ```bash
+        sudo apt update
+        sudo apt install amdgpu-dkms rocm-opencl-runtime
+        sudo reboot
+        ```
+      </Step>
+      <Step title="Add Your User to the render Group">
+        ```bash
+        sudo usermod -aG render,video $USER
+        # Log out and back in for the group change to take effect
+        ```
+      </Step>
+      <Step title="Verify ROCm is Available">
+        ```bash
+        rocminfo
+        ```
+
+        The output lists all detected ROCm-capable devices. Look for your GPU in the agent list.
+      </Step>
+      <Step title="Confirm Detection in TextToVid AI">
+        Launch TextToVid AI and go to **Settings → About → Hardware**. Your AMD GPU should appear under **Detected GPU** with **ROCm** listed as the acceleration backend.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Apple Silicon (Metal)">
+    On Macs with Apple M1, M2, or M3 chips, Metal GPU acceleration is built into macOS and requires no additional drivers or configuration.
+
+    <Steps>
+      <Step title="Confirm You Are on Apple Silicon">
+        Click the **Apple menu → About This Mac**. The chip line should read **Apple M1**, **Apple M2**, or **Apple M3** (or a Pro/Max/Ultra variant). Intel Macs do not support Metal acceleration in TextToVid AI.
+      </Step>
+      <Step title="Ensure macOS is Up to Date">
+        TextToVid AI requires macOS 12 Monterey or later to use Metal. Go to **System Settings → General → Software Update** and install any available updates.
+      </Step>
+      <Step title="Confirm Detection in TextToVid AI">
+        Launch TextToVid AI and go to **Settings → About → Hardware**. Your Apple Silicon chip should appear under **Detected GPU** with **Metal** listed as the acceleration backend. No further action is needed.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Verify Your Installation
+
+After installing the app and configuring GPU drivers, take a moment to confirm everything is working correctly.
+
+1. Open TextToVid AI.
+2. Navigate to **Settings → About → Hardware**.
+3. Confirm the following information is listed:
+   - Your CPU model and core count.
+   - Total system RAM.
+   - Your GPU model (if applicable) and the acceleration backend (CUDA, ROCm, or Metal).
+4. Return to the main screen and verify that you can open **Settings → Models** without errors.
+
+If your GPU does not appear, double-check that your drivers are installed correctly and that you have restarted your machine after installation. Refer to your GPU vendor's documentation if the issue persists.
+
+<Note>
+  Ready to add your first model? Head to the [Model Selection guide](/guides/model-selection) for recommendations on which GGUF models work best on different hardware configurations, and instructions on where to download them.
+</Note>

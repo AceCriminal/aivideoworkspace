@@ -1,0 +1,70 @@
+---
+title: "GGUF Models: What They Are and How to Choose One"
+sidebarTitle: "GGUF Models"
+description: "Learn what GGUF model files are, how quantization levels affect quality and speed, and which models work best for AI video generation."
+---
+
+GGUF is a file format for distributing and running large language models entirely on your own hardware. Instead of relying on a remote API, you download a single model file and TextToVid AI loads it directly into memory to power the generation pipeline. The format is designed for efficient CPU and GPU inference, making it possible to run capable AI models on consumer hardware without specialized data-center equipment.
+
+## What is GGUF?
+
+GGUF — short for **GPT-Unified Format** — is the standard file format for sharing LLM weights in a form that can be loaded and run locally. A GGUF file bundles everything the runtime needs — model weights, architecture metadata, and tokenizer configuration — into a single `.gguf` file. This makes distribution and loading straightforward: no separate configuration files, no package dependencies beyond the runtime itself.
+
+GGUF was developed by the [llama.cpp](https://github.com/ggerganov/llama.cpp) project and has since become the de facto standard for local LLM inference. TextToVid AI uses the same llama.cpp-compatible runtime under the hood, which means any valid GGUF file from the broader ecosystem works with the application.
+
+## Quantization Levels
+
+Model files distributed in GGUF format are almost always **quantized** — meaning the model's weights have been compressed from their original 16- or 32-bit floating-point representation down to fewer bits per value. Quantization reduces file size and RAM requirements at a small cost to output quality. Higher quantization numbers indicate less compression and better fidelity.
+
+The table below shows the most common quantization levels you will encounter when browsing model repositories.
+
+| Quantization | File Size | RAM Required | Quality | Speed |
+|---|---|---|---|---|
+| Q2_K | ~2–3 GB | 4 GB | Basic | Very Fast |
+| Q4_K_M | ~4–6 GB | 8 GB | Good | Fast |
+| Q5_K_M | ~5–7 GB | 10 GB | Better | Moderate |
+| Q6_K | ~6–8 GB | 12 GB | High | Slower |
+| Q8_0 | ~8–12 GB | 16 GB | Best | Slowest |
+
+<Tip>
+  **Q4_K_M is the best starting point for most users.** It delivers a strong balance between output quality, generation speed, and RAM usage, and runs well on machines with 8 GB of RAM or more. Only move to Q5_K_M or higher if you have plenty of RAM and prioritize quality over speed.
+</Tip>
+
+## Where to Download GGUF Models
+
+[HuggingFace](https://huggingface.co) is the primary source for GGUF model files. Use the search bar and filter by the `gguf` tag to browse available models. When evaluating a model, check the model card for information about its intended use case, training data, and any known limitations.
+
+Good families to start with include:
+
+- **Mistral** — strong general-purpose instruction following, widely tested
+- **LLaMA** — versatile, large community, many fine-tuned variants
+- **Phi** — compact and fast, punches above its weight at small sizes
+
+Search for the model family name alongside `gguf` (for example, *"mistral 7b gguf"*) to find ready-to-use quantized releases.
+
+<Warning>
+  Only download model files from publishers you trust. HuggingFace does not vet every uploaded file, and malicious actors occasionally upload files under convincing names. Stick to well-known organizations, verified publishers, or community-recommended repositories. Never run a GGUF file sourced from an unofficial link or a direct download outside of HuggingFace.
+</Warning>
+
+## Recommended Models for Video Generation
+
+Not every GGUF model is equally well-suited to the scene-description and keyframe-planning tasks that TextToVid AI relies on. The following model categories tend to perform best:
+
+- **Small 7B instruction-tuned models** — Fast to load and run, suitable for quick drafts and experimentation. Expect good prompt understanding with occasional inconsistency on complex scenes.
+- **13B instruction-tuned models** — Noticeably more coherent scene descriptions and better adherence to detailed prompts. Recommended when quality matters more than speed.
+- **Cinematics or creative-writing fine-tunes** — Models fine-tuned on film scripts, scene descriptions, or visual storytelling data produce more vivid, stylistically consistent keyframe plans.
+- **Long-context models** — If your prompt is lengthy or you are chaining multiple scene descriptions together, a model with a larger context window handles the full input without truncation.
+
+When in doubt, start with a popular 7B instruction-tuned model at Q4_K_M quantization, evaluate the output, and upgrade to a larger model only if the results fall short of your expectations.
+
+## Where to Place Model Files
+
+TextToVid AI looks for model files in the following default directory on all platforms:
+
+```
+~/TextToVidAI/models/
+```
+
+Copy or move any `.gguf` file into that folder and it will appear automatically in the model selector the next time you launch the application or refresh the model list.
+
+If you prefer to store models in a different location — for example, on a secondary drive with more space — you can update the path in **Settings → Models → Models Directory**. TextToVid AI will scan whatever directory you set there, so you can point it at an existing folder without moving any files.

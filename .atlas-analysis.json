@@ -1,13 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
+  "projectType": "ai-ml",
+  "projectName": "TextToVid AI",
+  "projectDescription": "A desktop application that generates AI-powered videos from text prompts using local GGUF language models — no cloud required.",
   "theme": "almond",
-  "name": "TextToVid AI",
-  "colors": {
-    "primary": "#ef7025",
-    "light": "#eec9bc",
-    "dark": "#4fa1ab"
-  },
-  "favicon": "/favicon.svg",
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
   "navigation": {
     "tabs": [
       {
@@ -59,14 +57,23 @@
       }
     ]
   },
-  "navbar": {
-    "primary": {
-      "type": "button",
-      "label": "Get Started",
-      "href": "/quickstart"
-    }
-  },
-  "footer": {
-    "socials": {}
-  }
+  "keyFeatures": [
+    "Generate videos entirely from text prompts",
+    "Runs fully offline using local GGUF AI models",
+    "No API keys or cloud subscriptions required",
+    "Configurable model selection and model parameters",
+    "Adjustable video resolution, frame rate, and duration",
+    "Batch video generation from multiple prompts",
+    "Custom prompt templates for consistent output style",
+    "GPU and CPU inference support"
+  ],
+  "publicApiSurface": [
+    "Text prompt input",
+    "GGUF model loader",
+    "Video generation pipeline",
+    "Output settings (resolution, FPS, duration)",
+    "Batch generation mode",
+    "Model configuration (temperature, context length, seed)",
+    "Export formats (MP4, GIF, WebM)"
+  ]
 }
